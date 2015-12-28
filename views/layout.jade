@@ -3,15 +3,25 @@ html
 	head
 		block head
 			block title
-				title Program Name
+				title CourseSuggest
 			block meta
 				meta(name='description', content='')
 				meta(name='keywords', content='')
-			link(rel='stylesheet', href='/css/bootstrap.min.css')
-			| <style>
-			| body { padding-top: 60px; }
-			| </style>
-			script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js')
+				link(rel='stylesheet', href='/css/bootstrap.min.css')
+				link(rel='stylesheet', href='/css/style.css')
+				link(rel='stylesheet', href='/css/graphs.css')
+				| <style>
+				| body { padding-top: 60px; }
+				| </style>
+				| <!-- Import common -->
+				script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js')
+				| <!-- Import Sigma JS -->
+				| <script src="/lib/sigma.min.js"></script>
+				| <script src="/lib/sigma.layout.forceAtlas2.min.js"></script>
+				| <script src="/lib/sigma.parsers.json.min.js"></script>
+				| <!-- Import application specific JS -->
+				| <script src="/scripts/graphs.js"></script>
+				| <script src="/scripts/ui.js"></script>
 	body
 		include header
 

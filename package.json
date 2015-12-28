@@ -1,13 +1,19 @@
 {
-  "name": "nodebootstraper",
+  "name": "coursesuggest",
   "version": "0.0.2",
   "dependencies": {
-    "express": "*",
-    "jade": "*",
-    "stylus": "*",
+  "express": "*",
+  "jade": "*",
+  "stylus": "*",
+  "neo4j": "*",
+  "restify": "*",
+  "request": "*",
+  "mongoose": "*",
 	"serve-favicon": "*",
-	"morgan": "*",
+  "morgan": "*",
+	"reload": "*",
 	"body-parser": "*",
+  "seraph": "*",
 	"method-override": "*"
   },
   "engines": {
