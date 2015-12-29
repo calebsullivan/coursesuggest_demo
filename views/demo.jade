@@ -2,5 +2,13 @@ extends layout
 
 block content
 	div.container
-		h1 Program Name
+		h1 Capability and technology demo
+		p This page requires JavaScript enabled and an HTML5 capable browser. OpenGL will be used as a renderer in recent Safari, Chrome or FF builds for Windows and OS X.
+		h3 Graph Database
+		p A vizualziation of all nodes and edges is shown here. 
+		h3 Decision making
+		hr
+		h3 Course filtering by year and semester
+		p In example, a vizualziation of the filter request for all courses that meet meet the requirement "faculty:- '03'", producing all science courses. An additional filter on semester of offering arranges the breakdown by year. Note that edges show course relationships and vertical edges show anti-requisites. Scroll to zoom, drag to move.
 		include demo.html
+		| <script src="/scripts/graphs.js"></script>

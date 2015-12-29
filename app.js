@@ -14,7 +14,6 @@ function filterForAll(cs, callback){
 }
 
 function filterCoursesInArray(cs, callback){
-
 	db.query(QUERY_FILTER_COURES_IN_ARRAY, 
 		{code: cs}, function(err, result) {
 	  	if (err) console.log(err);
@@ -139,13 +138,6 @@ const QUERY_ALL_RELATIONSHIPS =
 	    RETURN {id: toString(id(r)), source: toString(n.id), target: toString(m.id)}"
 
 
-var db = require('seraph')({
-  server: 'http://' + NEO4J_HOST + ':' + NEO4J_PORT,
-  user: NEO4J_USER,
-  pass: NEO4J_PASS,
-  id: 'seraph'
-});
-
 var express = require('express')
   , routes = require('./routes')
   , http = require('http')
@@ -174,12 +166,35 @@ if (app.get('env') == 'development') {
 	app.locals.pretty = true;
 }
 
+if (app.get('env') == 'development') {
+	var db = require('seraph')({
+	  server: 'http://' + NEO4J_HOST + ':' + NEO4J_PORT,
+	  user: NEO4J_USER,
+	  pass: NEO4J_PASS,
+	  id: 'seraph'
+	});
+} else {
+	url = require('url').parse(process.env.GRAPHENEDB_URL)
+
+	var db = require("seraph")({
+	  server: url.protocol + '//' + url.host,
+	  user: url.auth.split(':')[0],
+	  pass: url.auth.split(':')[1],
+	  id: 'seraph'
+	});	
+}
+
+
 app.get('/', routes.index);
 
 var router = express.Router();  
 
 router.get('/api/test', function(req, res) {
     res.json({ status: ['ok', 'ok', 'nan', 'ok'] });   
+});
+
+router.get('/api/programs', function(req, res)
+	{res.sendfile('views/index-bulk.html', {root: __dirname })
 });
 
 router.get('/api/full', function(req, res) {
@@ -192,6 +207,34 @@ router.get('/api/full', function(req, res) {
 
 router.get('/demo', function(req, res){
     res.render('demo', { title: 'Decision Making demo' });
+});
+
+router.get('/programs/science/computer/BCSH', function(req, res){
+    res.render('programs/science/computer/BCSH');
+});
+
+router.get('/programs/science/computer/BCSH/specalization/AI', function(req, res){
+    res.render('programs/science/computer/BCSHAI');
+});
+
+router.get('/programs/science/computer/BCS/general', function(req, res){
+    res.render('programs/science/computer/BCSG');
+});
+
+router.get('/programs/science/undeclared', function(req, res){
+    res.render('programs/science/undeclared');
+});
+
+router.get('/programs/engineering/electrical', function(req, res){
+    res.render('programs/engineering/electrical');
+});
+
+router.get('/programs/engineering/mechanical', function(req, res){
+    res.render('programs/engineering/mechanical');
+});
+
+router.get('/user', function(req, res){
+    res.render('user');
 });
 
 app.use('/', router);
