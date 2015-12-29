@@ -89,6 +89,14 @@ strong {
 .tile.gold:hover {
   background: #FFD700;
 }
+
+.tile.grey {
+  background: #999;
+}
+.tile.grey:hover {
+  background: #AAA;
+}
+
 .tile.orange {
   background: #DC572E;
 }
