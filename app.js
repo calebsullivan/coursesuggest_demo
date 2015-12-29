@@ -221,8 +221,8 @@ router.get('/api/test', function(req, res) {
 router.get('/api/programs', function(req, res){
 	res.sendfile('views/index-bulk.html', {root: __dirname })
 	if (!(app.get('env') == 'development')){ 
-		client.set(process.hrtime(), JSON.stringify(req.headers['x-forwarded-for'] || req.connection.remoteAddress))
-		console.log(process.hrtime(), JSON.stringify(req.headers['x-forwarded-for'] || req.connection.remoteAddress));
+		client.set(process.hrtime(), JSON.stringify(req.headers['x-forwarded-for']))
+		console.log(process.hrtime(), JSON.stringify(req.headers['x-forwarded-for']));
 	}
 });
 
@@ -268,8 +268,8 @@ router.get('/api/BCSH', function(req, res) {
 router.get('/demo', function(req, res){
     res.render('demo', { title: 'Decision Making demo' });
 	if (!(app.get('env') == 'development')){ 
-		client.set(process.hrtime(), JSON.stringify(req.headers['x-forwarded-for'] || req.connection.remoteAddress))
-		console.log(process.hrtime(), JSON.stringify(req.headers['x-forwarded-for'] || req.connection.remoteAddress));
+		client.set(process.hrtime(), JSON.stringify(req.headers['x-forwarded-for']))
+		console.log(process.hrtime(), JSON.stringify(req.headers['x-forwarded-for']));
 	}
 });
 

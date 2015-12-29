@@ -12,10 +12,6 @@
 // const NEO4J_USER = 'neo4j';
 // const NEO4J_PASS = 'neo';
 
-const NEO4J_HOST = 'app45224199.sb02.stations.graphenedb.com';
-const NEO4J_PORT = 24789;
-const NEO4J_USER = 'app45224199';
-const NEO4J_PASS = 'M50GffrBYkQqNHOk8qzE';
 
 
 var BCSH = ["03-60-100", "03-60-140", "03-60-141", "03-60-212", "03-60-214", "03-60-231", "03-60-254", "03-60-256", "03-60-265", "03-60-266", "03-60-311", "03-60-315", "03-60-322", "03-60-330", "03-60-354", "03-60-367", "03-60-440", "03-60-454", 
