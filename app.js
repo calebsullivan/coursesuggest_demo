@@ -218,8 +218,12 @@ router.get('/api/test', function(req, res) {
     res.json({ status: ['ok', 'ok', 'nan', 'ok'] });   
 });
 
-router.get('/api/programs', function(req, res)
-	{res.sendfile('views/index-bulk.html', {root: __dirname })
+router.get('/api/programs', function(req, res){
+	res.sendfile('views/index-bulk.html', {root: __dirname })
+	if (!(app.get('env') == 'development')){ 
+		client.set(process.hrtime(), JSON.stringify(req))
+		console.log(process.hrtime(), JSON.stringify(req));
+	}
 });
 
 router.get('/api/full', function(req, res) {
