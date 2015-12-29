@@ -27,6 +27,21 @@ function filterCoursesInArray(cs, callback){
 	});
 }
 
+
+function getAllRelRels(cs, callback){
+	db.query(QUERY_REL_RELATIONSHIPS,
+		{code: cs}, function(err, result) {
+	  	if (err) console.log(err);
+	  	if(result) {	  		
+			callback(result);
+	  	}
+		else {
+	  		callback([]);
+	  		return;
+		}
+	});
+}
+
 function getAllRels(callback){
 	db.query(QUERY_ALL_RELATIONSHIPS,
 		{code: []}, function(err, result) {
@@ -92,7 +107,7 @@ function clone(obj) {
 }
 
 
-var BCG = ["03-60-100", "03-60-140"];
+var BCSG = ["03-60-100", "03-60-140", "03-60-141", "03-60-212", "03-60-254", "03-60-256", "03-60-265", "03-60-266", "03-60-322", "03-60-315", "03-60-330", "03-60-334", "03-60-367", "03-60-280", "03-62-120", "03-62-140", "03-65-205"];
 
 var BCSH = ["03-60-100", "03-60-140", "03-60-141", "03-60-212", "03-60-214", "03-60-231", "03-60-254", "03-60-256", "03-60-265", "03-60-266", "03-60-311", "03-60-315", "03-60-322", "03-60-330", "03-60-354", "03-60-367", "03-60-440", "03-60-454", 
 "03-60-496", "03-62-140", "03-62-141", "03-62-190", "03-62-369", "03-65-205"];
@@ -133,6 +148,11 @@ const QUERY_FILTER_COURES_IN_ARRAY =
 				x: 0, \
 				y: 0}"
 
+const QUERY_REL_RELATIONSHIPS =
+	   "MATCH n-[r]->m \
+		WHERE n.code IN {code} AND m.code IN {code}\
+	    RETURN {id: toString(id(r)), source: toString(n.id), target: toString(m.id)}"
+
 const QUERY_ALL_RELATIONSHIPS =
 	   "MATCH n-[r]->m \
 	    RETURN {id: toString(id(r)), source: toString(n.id), target: toString(m.id)}"
@@ -148,6 +168,7 @@ var express = require('express')
   , reload = require('reload')
   , methodOverride = require('method-override')
   , neo4j = require('neo4j');
+var redis = require('redis');
 
 var app = express();
 
@@ -182,6 +203,10 @@ if (app.get('env') == 'development') {
 	  pass: url.auth.split(':')[1],
 	  id: 'seraph'
 	});	
+
+	var redisURL = url.parse(process.env.REDISCLOUD_URL);
+	var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+	client.auth(redisURL.auth.split(":")[1]);
 }
 
 
@@ -205,8 +230,43 @@ router.get('/api/full', function(req, res) {
 	});
 });
 
+router.get('/api/BCSG', function(req, res) {
+	filterCoursesInArray(BCSG, function(f){
+		getAllRelRels(BCSG, function(g){
+			res.json({edges:g, nodes:f});
+		});
+	});
+});
+
+router.get('/api/BCSH', function(req, res) {
+	var processed = 0, t = [];
+	BCSH.forEach(function(i){
+		rackCourse(i, function(output){
+			if(output == undefined){} else {
+				output.forEach(function(j){
+					processed++;
+					if(processed === BCSH.length){
+						filterCoursesInArray(t, function(f){
+							getAllRelRels(t, function(g){
+								res.json({edges:g, nodes:f});
+								console.log(t);
+							});
+						});
+					}
+					t.push(j);
+				});
+			}
+		});
+
+	});
+});	
+
 router.get('/demo', function(req, res){
     res.render('demo', { title: 'Decision Making demo' });
+	if (!(app.get('env') == 'development')){ 
+		client.set(process.hrtime(), JSON.stringify(req))
+		console.log(process.hrtime(), JSON.stringify(req));
+	}
 });
 
 router.get('/programs/science/computer/BCSH', function(req, res){

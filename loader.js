@@ -126,6 +126,13 @@ db.simple([
 'CREATE (c03_60_496: Course{id:"60496", code:"03-60-496", name:"Research Project", reqs:"Anti-requisite 03-60-499", load:"3 lecture hours or equivalent a week, for two terms", notes:""})',
 'CREATE (c03_60_499: Course{id:"60499", code:"03-60-499", name:"Project Management: Techniques and Tools", reqs:"(Antirequisite: 03-60-496.", load:"3 lecture hours or equivalent a week, for two terms.", notes:""})',
 
+'CREATE (c03_62_120: Course{id:"62120", code:"03-62-120", name:"Linear Algebra I", reqs:"(Antirequisite: 62-125 or 62-126) ", load:"(3 lecture hours, 1 tutorial hour a week.)", notes:""})', 
+'CREATE (c03_62_140: Course{id:"62140", code:"03-62-140", name:"Differential Calculus", reqs:"(Prerequisite: Grade 12 Advanced Functions and Grade 12 Calculus and Vectors or equivalent, or 62-101.) (Antirequisite: 62-139) ", load:"(3 lecture hours, 1 tutorial hour a week; or 4 lecture hours, 2 tutorial hour a week.)", notes:""})', 
+'CREATE (c03_62_141: Course{id:"62141", code:"03-62-141", name:"Integral Calculus", reqs:"(Prerequisite: 62-139 or 62-140.) ", load:"(3 lecture hours, 1 tutorial hour a week.)", notes:""})', 
+'CREATE (c03_62_190: Course{id:"62190", code:"03-62-190", name:"Mathematical Foundations", reqs:"(Prerequisite: 60-100 or one of 62-120, 62-125, or 62-126.) ", load:"(2 lecture, 2 tutorial hours a week.)", notes:""})', 
+'CREATE (c03_65_205: Course{id:"65205", code:"03-65-205", name:"Statistics for the Sciences", reqs:"(Prerequisite: Grade 12U Advanced Level Mathematics or equivalent, or Grade 11 Functions and Relations, or Grade 11 Functions.) (Antirequisites: 02-250, 73-101, 73-102, 73-105, 73-205, and 85-222.)", load:"(3 lecture hours, 1 tutorial hour a week.)", notes:""})', 
+'CREATE (c03_62_369: Course{id:"62369", code:"03-62-369", name:"Numerical Analysis for Computer Scientists", reqs:"(Prerequisites: 60-141, 62-141 and one of 62-120, 62-125 or 62-126.)", load:"", notes:""})', 
+
 'CREATE (c03_60_141) -[:Prerequisite]-> (c03_60_140)',
 'CREATE (c03_60_141) -[:Prerequisite]-> (c03_60_100)',
 
@@ -140,7 +147,7 @@ db.simple([
 'CREATE (c03_60_214) -[:Prerequisite]-> (c03_60_212)',
 
 'CREATE (c03_60_231) -[:Prerequisite]-> (c03_60_100)',
-// 'CREATE (c03_60_231) -[:Prerequisite]-> (c03_62_190)',
+'CREATE (c03_60_231) -[:Prerequisite]-> (c03_62_190)',
 
 'CREATE (c03_60_254) -[:Prerequisite]-> (c03_60_100)',
 'CREATE (c03_60_254) -[:Prerequisite]-> (c03_60_141)',
@@ -184,7 +191,7 @@ db.simple([
 'CREATE (c03_60_350) -[:Prerequisite]-> (c03_60_265)',
 
 'CREATE (c03_60_352) -[:Prerequisite]-> (c03_60_254)',
-// 'CREATE (c03_60_352) -[:Prerequisite]-> (c03_62_120)',
+'CREATE (c03_60_352) -[:Prerequisite]-> (c03_62_120)',
 
 'CREATE (c03_60_354) -[:Prerequisite]-> (c03_60_214)',
 'CREATE (c03_60_354) -[:Prerequisite]-> (c03_60_231)',
@@ -200,7 +207,7 @@ db.simple([
 'CREATE (c03_60_368) -[:Prerequisite]-> (c03_60_330)',
 'CREATE (c03_60_368) -[:Prerequisite]-> (c03_60_367)',
 
-// 'CREATE (c03_60_371) -[:Prerequisite]-> (c03_65_205)',
+'CREATE (c03_60_371) -[:Prerequisite]-> (c03_65_205)',
 'CREATE (c03_60_371) -[:Prerequisite]-> (c03_60_254)',
 
 'CREATE (c03_60_375) -[:Prerequisite]-> (c03_60_212)',
@@ -260,6 +267,13 @@ db.simple([
 
 'CREATE (c03_60_496) -[:Antirequisite]-> (c03_60_499)',
 'CREATE (c03_60_499) -[:Antirequisite]-> (c03_60_496)',
+
+'CREATE (c03_62_190) -[:Prerequisite]-> (c03_62_120)',
+'CREATE (c03_62_141) -[:Prerequisite]-> (c03_62_140)',
+'CREATE (c03_62_369) -[:Prerequisite]-> (c03_60_141)',
+'CREATE (c03_62_369) -[:Prerequisite]-> (c03_62_120)',
+'CREATE (c03_62_369) -[:Prerequisite]-> (c03_62_141)',
+
 	].join('\n');
 	db.query(query, function(err, results) {
 	  if (err) { console.log(err); return; }
@@ -267,17 +281,26 @@ db.simple([
 	});
 }).then(function(test) {
 
-var t = ["asdf"];
+var t = [];
 
 q.fcall(function(){
-	// console.log(BCSH);
-	// BCSH.forEach(function(i){
-	// 	rackCourse(i, function(output){
-	// 		t = t.concat(output);
-	// 	});
-	// });
+	var processed = 0;
+	BCSH.forEach(function(i){
+		rackCourse(i, function(output){
+			if(output == undefined){} else {
+				output.forEach(function(j){
+					processed++;
+					if(processed === BCSH.length){
+						console.log(t);
+						return;
+					}
+					console.log(j);
+					t.push(j);
+				});
+			}
+		});
 
-
+	});
 })
 .then(function (){
 

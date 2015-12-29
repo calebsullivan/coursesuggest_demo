@@ -3,12 +3,25 @@ extends layout
 block content
 	div.container
 		h1 Capability and technology demo
-		p This page requires JavaScript enabled and an HTML5 capable browser. OpenGL will be used as a renderer in recent Safari, Chrome or FF builds for Windows and OS X.
+		p This page requires JavaScript enabled and an HTML5 capable browser. OpenGL will be used as a renderer in recent Safari, Chrome or FF builds for Windows and OS X. On iOS or Android, Webkit is required.
 		h3 Graph Database
-		p A vizualziation of all nodes and edges is shown here. 
+		p A graph database is a database that uses graph structures (nodes, edges and properties) for relational queries. This application uses Neo4j, a graph database written in Java, as the "fact" base for rules/inference. 
+		//A visualization of all nodes and edges is shown here: 
+
+		hr
 		h3 Decision making
+		p Take as an example, the BCSH program. Final state requirements in the database are:
+		pre ["03-60-100", "03-60-140", "03-60-141", "03-60-212", "03-60-214", "03-60-231", "03-60-254", "03-60-256", "03-60-265", "03-60-266", "03-60-311", "03-60-315", "03-60-322", "03-60-330", "03-60-354", "03-60-367", "03-60-440", "03-60-454", "03-60-496", "03-62-140", "03-62-141", "03-62-190", "03-62-369", "03-65-205"]
+		p Using backwards chanining inference, we find the following list of courses meets the pre-requisite relationships:
+		pre [ '03-60-100' ], [ '03-60-140' ], [ '03-60-440' ], [ '03-60-367' ], [ '03-60-354' ], [ '03-60-330' ], [ '03-60-496' ], [ '03-60-454' ], [ '03-62-140' ], [ '03-62-369' ], [ '03-62-141' ], [ '03-62-190' ], [ '03-65-205' ], [ '03-60-141', '03-60-140' ], [ '03-60-214', '03-60-212' ], [ '03-60-212', '03-60-141' ], [ '03-60-231', '03-60-100' ], [ '03-60-266', '03-60-265' ], [ '03-60-265', '03-60-140' ], [ '03-60-256', '03-60-141' ], [ '03-60-254', '03-60-141' ], [ '03-60-322', '03-60-212' ], [ '03-60-311', '03-60-254' ], [ '03-60-315', '03-60-254' ] 
 		hr
 		h3 Course filtering by year and semester
-		p In example, a vizualziation of the filter request for all courses that meet meet the requirement "faculty:- '03'", producing all science courses. An additional filter on semester of offering arranges the breakdown by year. Note that edges show course relationships and vertical edges show anti-requisites. Scroll to zoom, drag to move.
-		include demo.html
+		p In example, a visualization of the filter request for all courses that meet meet the requirement "faculty:- '03'", producing all science courses. An additional filter on semester of offering arranges the breakdown by year. Note that edges show course relationships and vertical edges show anti-requisites. Scroll to zoom, drag to move, pinch to rotate.
+		div.network-graph-wrapper
+			div#network-graph
+		hr
 		| <script src="/scripts/graphs.js"></script>
+		h3 Caching and data acquisition
+		p This application uses data taken by a script from https://my.uwindsor.ca/web/uw/course-search. Redis2go is used as a cache and GrapheneDB is used for facts.
+
+

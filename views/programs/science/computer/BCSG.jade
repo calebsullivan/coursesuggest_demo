@@ -2,9 +2,97 @@ extends ../../../layout
 
 block content
 	div.container
-		h2 BCS[H] - Bachelor of Computer Science (Honours)
-			<div class="network-graph-wrapper">
-			<div id="network-graph"></div>
-			</div>
-			<hr>
-			| <script src="/scripts/graphs.js"></script>
+		h2 BCS[G] - Bachelor of Computer Science (General)
+		p For this program, you will need to take:
+		pre ["03-60-100", "03-60-140", "03-60-141", "03-60-212", "03-60-254", "03-60-256", "03-60-265", "03-60-266", "03-60-322", "03-60-315", "03-60-330", "03-60-334", "03-60-367", "03-60-280", "03-62-120", "03-62-140", "03-65-205"]
+		p Over 3 years this looks like:
+		<div class="network-graph-wrapper">
+		<div id="network-graph"></div>
+		</div>
+		<hr>
+		script.
+			var s1 = sigma.parsers.json( "/api/BCSG",  {container: 'network-graph'},
+			function(s){
+			  nodeId = parseInt(getParameterByName('node_id'));
+			  var selectedNode;
+
+			  function splitter(n){
+			        var output = [],
+			        sNumber = n.toString();
+
+			    for (var i = 0, len = sNumber.length; i < len; i += 1) {
+			        output.push(+sNumber.charAt(i));
+			    }
+			    return output;
+			  }
+
+			  s.graph.edges().forEach(function(edge, i, a) {
+			    edge.color = "#AAA";
+			  });
+
+			  s.graph.nodes().forEach(function(node, i, a) {
+			    if (node.id == nodeId) {
+			      selectedNode = node;
+			      return;
+			    }
+			  });
+
+			  //Initialize nodes as a circle
+			  var j = 0, k = 1;
+			  s.graph.nodes().forEach(function(node, i, a) {
+			    var split = splitter(node.id),
+			        col, row, intNode = parseInt(node.id);
+
+			    switch(split[1]){
+			      case '0':
+			        row = 0;
+			        break;
+			      case '2':
+			        row = 300;
+			        break;
+			      case '5':
+			        row = 500;
+			        break;
+			      case '8':
+			        row = 700;
+			        break;
+			      default:
+			        row = 0;
+			    }
+			    if(parseInt(split[2]) > k){
+			      j = 0;
+			      k = parseInt(split[2]);
+			    } else {
+			      j = j + 20;
+			    }
+
+			    node.y = row+(intNode%100)+i%10+j;
+			    node.x = parseInt(split[2])*200;
+			  });
+
+			  //Call refresh to render the new graph
+			  s.settings({
+			    font:"times",
+			    sideMargin:15,
+			    labelThreshold:0
+			  });
+			  s.camera.goTo({
+			    x: 20,
+			    y: 40,
+			    angle: 0,
+			    ratio: 1
+			  });
+			  s.refresh();
+			  console.log(s);
+			  s1 = s;
+
+			  // s.startForceAtlas2();
+
+			  s.bind('clickNode', function(e) {
+			      console.log(e);
+			  });
+
+			  if (selectedNode != undefined){
+			    s.cameras[0].goTo({x:selectedNode['read_cam0:x'],y:selectedNode['read_cam0:y'],ratio:0.1});
+			  }
+			});

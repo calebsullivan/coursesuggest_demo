@@ -1,4 +1,5 @@
 
+ 
 var s1 = sigma.parsers.json( "/api/full",  {container: 'network-graph'},
 function(s){
   nodeId = parseInt(getParameterByName('node_id'));
@@ -62,6 +63,7 @@ function(s){
   s.settings({
     font:"times",
     sideMargin:15,
+    labelThreshold:0
   });
   s.camera.goTo({
     x: 140,
@@ -83,6 +85,7 @@ function(s){
     s.cameras[0].goTo({x:selectedNode['read_cam0:x'],y:selectedNode['read_cam0:y'],ratio:0.1});
   }
 });
- 
+
+
 console.log("SigmaJS loaded", s1);
 console.log("graphs.js loaded");
